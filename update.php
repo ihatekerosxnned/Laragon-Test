@@ -1,65 +1,55 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "db_phonebook";
+include('includes/header.php');
+include('classes/Contact.php');
+$Contact = new Contacts();
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+$ContactDisplay = $Contact->getContactById($_REQUEST['id']);
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+if(isset($_REQUEST['btn'])){
+    $id = $_REQUEST['id'];
+
+    $first_name = $_REQUEST['first_name'];
+    $last_name = $_REQUEST['last_name'];
+    $address = $_REQUEST['address'];
+    $phone_num = $_REQUEST['phone_num'];
+
+    $Contact ->updateContactById($id, $first_name, $last_name, $address, $phone_num);
+    echo "<script> alert('Update Successful!') </script>";
 }
 
-if (isset($_POST["id"])) {
-    $phone_num = $_POST['id'];
-
-    $sql = "SELECT first_name, last_name, address, phone_num FROM tbl_contacts where id = '$id' ";
-    $result = $conn->query($sql);
-}
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-    <link rel="stylesheet" href="styles/styles.css">
-    <title>Phonebook</title>
-</head>
-
-<body>
     <div class="w-full flex justify-between">
         <!-- FORM -->
         <div class="w-full p-4">
             <form action="index.php" method="post" class="p-4">
+                <?php foreach($ContactDisplay as $contact) {?>
                 <div class="w-full flex gap-2">
                     <div class="flex flex-col w-full my-4">
                         <label class="mb-2">First Name</label>
-                        <input type="text" id='first_name' name="first_name" placeholder="First Name" class="w-full px-4 py-2 text-black border-1 bg-gray-100 rounded-md shadow-sm">
+                        <input type="text" id='first_name' name="first_name" value=<?php echo $contact["first_name"] ?> placeholder="First Name" class="w-full px-4 py-2 text-black border-1 bg-gray-100 rounded-md shadow-sm">
                     </div>
                     <div class="flex flex-col w-full my-4">
                         <label class="mb-2">Last Name</label>
-                        <input type="text" id="last_name" name="last_name" placeholder="Last Name" class="w-full px-4 py-2 text-black border-1 bg-gray-100 rounded-md shadow-sm">
+                        <input type="text" id="last_name" name="last_name" value=<?php echo $contact["last_name"] ?> placeholder="Last Name" class="w-full px-4 py-2 text-black border-1 bg-gray-100 rounded-md shadow-sm">
                     </div>
                 </div>
                 <div class="w-full">
                     <div class="flex flex-col w-full my-4">
                         <label class="mb-2">Home Address</label>
-                        <input type="text" id="address" name="address" placeholder="Contact Number" class="w-full px-4 py-2 text-black border-1 bg-gray-100 rounded-md shadow-sm">
+                        <input type="text" id="address" name="address" value=<?php echo $contact["address"] ?> placeholder="Address" class="w-full px-4 py-2 text-black border-1 bg-gray-100 rounded-md shadow-sm">
                     </div>
                     <div class="flex flex-col w-full my-4">
                         <label class="mb-2">Contact Number</label>
-                        <input type="number" id="phone_num" name="phone_num" placeholder="Contact Number" class="w-full px-4 py-2 text-black border-1 bg-gray-100 rounded-md shadow-sm" max="11">
+                        <input type="number" id="phone_num" name="phone_num" value=<?php echo $contact["phone_num"] ?> placeholder="Contact Number" class="w-full px-4 py-2 text-black border-1 bg-gray-100 rounded-md shadow-sm">
                     </div>
                 </div>
                 <div class="w-full">
-                    <button type='submit' value='submit' class="w-full bg-blue-300 py-2 rounded-md shadow-md text-white font-bold">Submit</button>
+                <button type='submit' value='submit' name="btn" id="btn"
+                class="w-full bg-blue-300 py-2 rounded-md shadow-md text-white font-bold mt-4 hover:cursor-pointer hover:bg-blue-600 transition delay-150 duration-300 ease-in-out">Update</button>
                 </div>
             </form>
         </div>
+        <?php } ?>
         <!-- TABLE -->
         <!-- <div class="w-full p-2">
             <form action="" method="post" class="w-full flex mb-2 shadow-md">
