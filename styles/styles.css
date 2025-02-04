@@ -1,0 +1,7 @@
+body{
+    @apply bg-black;
+}
+
+*{
+    box-sizing: 0;
+}
