@@ -28,7 +28,6 @@ class Contacts{
         }
         return $result;
     }
-    
 
     function getContactById($id){
         global $conn;
@@ -37,7 +36,7 @@ class Contacts{
         return $result;
     }
 
-    function updateContactById($data, $id) {
+    function updateContactById($id, $data) {
         global $conn;
     
         $first_name = $data['first_name'];
@@ -46,18 +45,39 @@ class Contacts{
         $phone_num = $data['phone_num'];
     
         $sql = "UPDATE tbl_contacts SET 
-        first_name = '$first_name', 
-        last_name = '$last_name', 
-        address = '$address', 
-        phone_num = '$phone_num' 
-        WHERE id = $id ";
-    
+                first_name = '$first_name', 
+                last_name = '$last_name', 
+                address = '$address', 
+                phone_num = '$phone_num'
+                WHERE id = '$id'";
+
         $result = $conn->query($sql);
     
         if (!$result) {
             echo "Error updating record: " . $conn->error;
         }
     
+        return $result;
+    }
+    
+    function deleteById($id){
+        global $conn;
+
+        
+
+        $sql = "DELETE FROM tbl_contacts WHERE id = '$id' ";
+        $result = $conn->query($sql);
+
+        return $result;
+    }
+
+    function deleteMultipleById($id){
+        global $conn;
+
+        echo $id;
+        $sql = " DELETE FROM tbl_contacts WHERE id IN ($id)";
+        $result = $conn->query($sql);
+
         return $result;
     }
 
