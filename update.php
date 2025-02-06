@@ -1,7 +1,11 @@
 <?php
 include('includes/header.php');
 include('classes/Contact.php');
+include('classes/Gender.php');
 $Contact = new Contacts();
+$Gender = new Genders();
+
+$DisplayGenders = $Gender->displayGender();
 
 $id = $_REQUEST['id'];
 $ContactDisplay = $Contact->getContactById($id);
@@ -12,6 +16,7 @@ if(isset($_REQUEST['btn'])){
     $last_name = $_POST['last_name'];
     $address = $_POST['address'];
     $phone_num = $_POST['phone_num'];
+    $gender_id = $_POST['gender_id'];
     
     $Contact ->updateContactById($id, $_POST);
 }
@@ -32,6 +37,20 @@ if(isset($_REQUEST['btn'])){
                     </div>
                 </div>
                 <div class="w-full">
+                <div class="flex flex-col w-full mb-4">
+                    <label class="mb-2">Gender</label>
+                    <select name="gender_id" id="gender_id" value="<?php echo $contact['gender_id'];?>" class="w-full px-4 py-2 text-black border-1 bg-gray-100 rounded-md shadow-sm">
+                    <?php foreach ($DisplayGenders as $gender) { ?>
+                            <option hidden> Select Gender</option>
+                            <?php if($contact['gender_id'] == $gender['id']){ ?>
+                                <option selected value="<?php echo $gender['id']; ?>"><?php echo $gender['gender_name']; ?></option>
+                           <?php }else{ ?>
+                                <option value="<?php echo $gender['id']; ?>"><?php echo $gender['gender_name']; ?></option>
+                           <?php }
+                            ?>
+                        <?php } ?>
+                    </select>
+                </div>
                     <div class="flex flex-col w-full my-4">
                         <label class="mb-2">Home Address</label>
                         <input type="text" id="address" name="address" value=<?php echo $contact["address"] ?> placeholder="Address" class="w-full px-4 py-2 text-black border-1 bg-gray-100 rounded-md shadow-sm">
@@ -55,3 +74,8 @@ if(isset($_REQUEST['btn'])){
 SELECT * FROM tbl_contacts WHERE address LIKE "%Alijis%";
 
 INSERT INTO tbl_contacts (first_name, last_name, address, phone_num) VALUES ("Rafael", "Villa","Silay", "09225121845"),("Nicole", "Menez","Taculing", "09225181845"),("Boss Carl", "Hahaha","Banago", "09225189925"); -->
+
+<!-- <?php foreach ($DisplayGenders as $gender) { ?>
+                            <option hidden> Select Gender</option>
+                            <option value="<?php echo $contact['gender_id']; ?>"><?php echo $gender['gender_name']; ?></option>
+                        <?php } ?> -->
